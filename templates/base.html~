@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Paint </title>    
+  </head>
+  <body>
+  
+    <header>
+      <div class="container">
+        <h1 class="logo">Paint </h1>
+      </div>
+    </header> 
+    
+    <div class="container">
+      {% block content %}
+      {% endblock %}
+    </div>
+    
+  </body>
+</html>

@@ -1,0 +1,281 @@
+<html>
+<head><title>Paint app</title></head>
+
+
+<body >
+<canvas id="canvas" width="650" height="450" style="border:1px solid black; background-color:white;"></canvas>
+
+
+<a href="{{url_for('gallery')}}"  >
+    <button  class="button">Gallery</button>
+</a>
+
+<script src="{{url_for('static',filename='min.js')}}"></script>
+
+<form action="" method = "post"><left>
+<input type="button" value="Pencil" onclick="pencil()" >
+<input type="button" value="Line" onclick="line()" >
+<input type="button" value="Rect" onclick="rectangle()" >
+<input type="button" value="Circle" onclick="circle()" >
+<input type="button" value="Erase" onclick="erase()" >
+<input type ="button" value="brush" onclick="brush()">
+<input type="button" value="wipeit" onclick="wipeit()" ><br>
+<input type ="button" value="brush" onclick="brush()"><br>
+Filename:<input id="filename" name="filename">
+<input type='button' value='save' onclick='save()'>
+</left></form>
+
+
+<table>
+<center>
+<table border=2 bgcolor=#FFFFFF align="left">
+<td><div onclick = "color('#0000ff')" style ="width:20px;height:20px;background-color:#0000ff"></div><td>
+<td><div onclick = "color('#009fff')" style ="width:20px;height:20px;background-color:#009fff"></div><td>
+<td><div onclick = "color('#0fffff')" style ="width:20px;height:20px;background-color:#0fffff"></div><td>
+<td><div onclick = "color('#bfffff')" style ="width:20px;height:20px;background-color:#bfffff"></div><td>
+<td><div onclick = "color('#000000')" style ="width:20px;height:20px;background-color:#000000"></div><td>
+<td><div onclick = "color('#333333')" style ="width:20px;height:20px;background-color:#333333"></div><td>
+<td><div onclick = "color('#666666')" style ="width:20px;height:20px;background-color:#666666"></div><td>
+<td><div onclick = "color('#999999')" style ="width:20px;height:20px;background-color:#999999"></div><td>
+<td><div onclick = "color('#ffcc66')" style ="width:20px;height:20px;background-color:#ffcc66"></div><td>
+<td><div onclick = "color('#ffcc00')" style ="width:20px;height:20px;background-color:#ffcc00"></div><td>
+<td><div onclick = "color('#ffff00')" style ="width:20px;height:20px;background-color:#ffff00"></div><td>
+<td><div onclick = "color('#ffff99')" style ="width:20px;height:20px;background-color:#ffff99"></div><td>
+<td><div onclick = "color('#003300')" style ="width:20px;height:20px;background-color:#003300"></div><td>
+<td><div onclick = "color('#555000')" style ="width:20px;height:20px;background-color:#555000"></div><td>
+<tr>
+<td><div onclick = "color('#00ff00')" style ="width:20px;height:20px;background-color:#00ff00"></div><td>
+<td><div onclick = "color('#99ff99')" style ="width:20px;height:20px;background-color:#99ff99"></div><td>
+<td><div onclick = "color('#f00000')" style ="width:20px;height:20px;background-color:#f00000"></div><td>
+<td><div onclick = "color('#ff6600')" style ="width:20px;height:20px;background-color:#ff6600"></div><td>
+<td><div onclick = "color('#ff9933')" style ="width:20px;height:20px;background-color:#ff9933"></div><td>
+<td><div onclick = "color('#F5DEB3')" style ="width:20px;height:20px;background-color:#F5DEB3"></div><td>
+<td><div onclick = "color('#FFFFFF')" style ="width:20px;height:20px;background-color:#FFFFFF"></div><td>
+<td><div onclick = "color('#663300')" style ="width:20px;height:20px;background-color:#663300"></div><td>
+<td><div onclick = "color('#cc6600')" style ="width:20px;height:20px;background-color:#cc6600"></div><td>
+<td><div onclick = "color('#DEB887')" style ="width:20px;height:20px;background-color:#DEB887"></div><td>
+<td><div onclick = "color('#aa0fff')" style ="width:20px;height:20px;background-color:#aa0fff"></div><td>
+<td><div onclick = "color('#cc66cc')" style ="width:20px;height:20px;background-color:#cc66cc"></div><td>
+<td><div onclick = "color('#ff66ff')" style ="width:20px;height:20px;background-color:#ff66ff"></div><td>
+<td><div onclick = "color('#ff99ff')" style ="width:20px;height:20px;background-color:#ff99ff"></div><td>
+</tr>
+</table></center>
+
+
+<script>
+
+//Canvas initialization
+jsondata=[];
+var canvas = document.getElementById("canvas");
+var context=canvas.getContext('2d');
+//context.lineWidth=1;
+
+
+//Fill checking
+
+function fill(){
+f=1;
+} 
+
+
+//Save option
+
+function save() {
+  //var image=canvas.toDataURL("image/png");
+  var image = context.getImageData(0,0,canvas.width,canvas.height);    
+  //alert(image);
+  var json = JSON.stringify(image);
+  
+  //alert(json);
+
+  //window.location = image;
+}
+
+
+//Reset tool
+
+function wipeit(){
+context.clearRect(0,0,650,450);
+}
+
+//Pencil tool
+
+function pencil(){
+canvas.onmousedown=pencildown;
+canvas.onmouseup=pencilup;
+canvas.onmousemove=pencilmove;
+function pencildown(e){
+x=e.x;
+y=e.y;
+draw=true;
+}
+function pencilup(){
+draw=false;
+}
+function pencilmove(event){
+if (draw){
+   a =event.x;
+   b =event.y;
+   context.beginPath();
+   context.moveTo(x,y);
+   context.lineWidth = 1;
+   context.lineTo(a,b);
+   context.stroke();
+   context.closePath();
+   jasondata.push(
+   x=a;
+   y=b;
+ }}}
+
+
+//Line tool
+
+function line(){
+canvas.onmousedown=linedown;
+canvas.onmouseup=lineup;
+canvas.onmousemove=linemove;
+function linedown(e){
+ img=context.getImageData(0,0,canvas.width,canvas.height);
+ startx=e.x;
+ starty=e.y;
+ drag1=true;
+}
+function lineup(e){
+ drag1=false;
+}
+function linemove(e){
+ if (drag1){
+ context.putImageData(img,0,0);
+ endx=e.x;
+ endy=e.y;
+ 
+ context.beginPath();
+ context.lineWidth = 1;
+ context.moveTo(startx,starty);
+ context.lineTo(endx,endy);
+ context.stroke();
+ context.closePath();
+}}}
+
+//Rectangle tool
+
+function rectangle(){
+canvas.onmousedown=rectdown;
+canvas.onmouseup=rectup;
+canvas.onmousemove=rectmove;
+function rectdown(e){
+ img=context.getImageData(0,0,canvas.width,canvas.height);
+ startx=e.x;
+ starty=e.y;
+ drag2=true;
+}
+function rectup(e){
+drag2=false;
+}
+function rectmove(e){
+if (drag2){
+context.putImageData(img,0,0);
+rectw=e.x-startx;
+recth=e.y-starty;
+context.strokeRect(startx,starty,rectw,recth);
+if (f==1){
+context.fillRect(startx,starty,rectw,recth);
+}
+}}}
+
+//Circle tool
+
+function circle(){
+canvas.onmousedown=circledown;
+canvas.onmouseup=circleup;
+canvas.onmousemove=circlemove;
+function circledown(e){
+ img=context.getImageData(0,0,canvas.width,canvas.height);
+ startx=e.x;
+ starty=e.y;
+ drag3=true;
+}
+function circleup(e){
+drag3=false;
+}
+function circlemove(e){
+if (drag3){
+context.putImageData(img,0,0);
+endx=e.x;
+endy=e.y;
+context.beginPath();
+context.arc(Math.abs(endx+startx)/2,Math.abs(endy+starty)/2,Math.sqrt(Math.pow(endx-startx,2)+Math.pow(endy-starty,2))/2, 0, Math.PI*2, true); 
+context.closePath();
+context.stroke();
+if (f==1){
+context.fill();
+}
+}}}
+
+//Color select tool
+
+function color(colour){
+context.fillStyle = colour;
+context.strokeStyle=colour;
+//context.fillStyle=colour;
+}
+
+//Eraser tool
+
+
+function erase(){
+canvas.onmousedown=erasedown;
+canvas.onmouseup=eraseup;
+canvas.onmousemove=erasemove;
+function erasedown(e){
+  drag5=true;
+}
+function eraseup(e){
+drag5=false;
+}
+function erasemove(e){
+if(drag5){
+x=e.x;
+y=e.y;
+context.clearRect(x,y,20,20);
+}}}
+
+
+//Brush tool
+
+function brush(){
+canvas.onmousedown=brushdown;
+canvas.onmouseup=brushup;
+canvas.onmousemove=brushmove;
+function brushdown(e){
+drag9=true;
+x = e.x;
+y = e.y; 
+}
+function brushup(e){
+drag9=false;
+}
+function brushmove(e){
+if (drag9){
+   a = e.x;
+   b = e.y;
+   context.beginPath();
+   context.moveTo(x,y);
+   context.lineTo(a,b);
+   context.lineWidth = 10;
+   context.stroke();
+   context.closePath();
+   x=a;
+   y=b;
+// for(var i=0;i<7;i=i+0.1){
+//context.arc(x+i,y+i,2, 0, Math.PI*2, true);
+//context.closePath();
+context.fill();
+}}}
+
+
+
+
+</script>
+</body>
+</html>

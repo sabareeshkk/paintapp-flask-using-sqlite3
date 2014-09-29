@@ -1,0 +1,210 @@
+<html>
+<head><title>paint</title>
+<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+		<link href='static/bootstrap.min.css' rel="stylesheet" media='screen'>
+</head>
+<table>
+<tr align="center">
+        <canvas id = "canvas" width=1280 height=400 style="background-color:white;border: 1px solid #000000"></canvas></div>
+<a href="{{url_for('gallery')}}"  >
+    <button  class="button">Arts</button>
+</a>
+
+<script src="{{url_for('static',filename='min.js')}}"></script>
+<form><center>
+<input  type="button" Style = "color:black" value="line" onclick="line()">
+<input  type="button" Style = "color:black" value="rectangle" onclick="rectangle()">
+<input  type="button" Style = "color:black" value="circle" onclick="circle()">
+<input  type="button" Style = "color:black" value="pencil" onclick="pencil()">
+<input  type="button" Style = "color:black" value="fillstyle" onclick="fill()">
+<input  type="button" Style = "color:black" value="eraser" onclick="erase()">
+<input  type="button" Style = "color:black" value="clear_scrn" onclick="resete()"><br>
+Filename:<input id="filename" name="filename">
+<input type='button' value='save' onclick='save()'>
+</center></form>
+<center>
+<table border=2 bgcolor=#FFFFFF align="center">
+<td><div onclick = "color('#0000ff')" style ="width:10px;height:10px;background-color:#0000ff"></div><td>
+<td><div onclick = "color('#009fff')" style ="width:10px;height:10px;background-color:#009fff"></div><td>
+<td><div onclick = "color('#0fffff')" style ="width:10px;height:10px;background-color:#0fffff"></div><td>
+<td><div onclick = "color('#bfffff')" style ="width:10px;height:10px;background-color:#bfffff"></div><td>
+<td><div onclick = "color('#000000')" style ="width:10px;height:10px;background-color:#000000"></div><td>
+<td><div onclick = "color('#333333')" style ="width:10px;height:10px;background-color:#333333"></div><td>
+<td><div onclick = "color('#666666')" style ="width:10px;height:10px;background-color:#666666"></div><td>
+<td><div onclick = "color('#999999')" style ="width:10px;height:10px;background-color:#999999"></div><td>
+<td><div onclick = "color('#ffcc66')" style ="width:10px;height:10px;background-color:#ffcc66"></div><td>
+<td><div onclick = "color('#ffcc00')" style ="width:10px;height:10px;background-color:#ffcc00"></div><td>
+<td><div onclick = "color('#ffff00')" style ="width:10px;height:10px;background-color:#ffff00"></div><td>
+<td><div onclick = "color('#ffff99')" style ="width:10px;height:10px;background-color:#ffff99"></div><td>
+<td><div onclick = "color('#003300')" style ="width:10px;height:10px;background-color:#003300"></div><td>
+<td><div onclick = "color('#555000')" style ="width:10px;height:10px;background-color:#555000"></div><td>
+<tr>
+<td><div onclick = "color('#00ff00')" style ="width:10px;height:10px;background-color:#00ff00"></div><td>
+<td><div onclick = "color('#99ff99')" style ="width:10px;height:10px;background-color:#99ff99"></div><td>
+<td><div onclick = "color('#f00000')" style ="width:10px;height:10px;background-color:#f00000"></div><td>
+<td><div onclick = "color('#ff6600')" style ="width:10px;height:10px;background-color:#ff6600"></div><td>
+<td><div onclick = "color('#ff9933')" style ="width:10px;height:10px;background-color:#ff9933"></div><td>
+<td><div onclick = "color('#F5DEB3')" style ="width:10px;height:10px;background-color:#F5DEB3"></div><td>
+<td><div onclick = "color('#330000')" style ="width:10px;height:10px;background-color:#330000"></div><td>
+<td><div onclick = "color('#663300')" style ="width:10px;height:10px;background-color:#663300"></div><td>
+<td><div onclick = "color('#cc6600')" style ="width:10px;height:10px;background-color:#cc6600"></div><td>
+<td><div onclick = "color('#DEB887')" style ="width:10px;height:10px;background-color:#DEB887"></div><td>
+<td><div onclick = "color('#aa0fff')" style ="width:10px;height:10px;background-color:#aa0fff"></div><td>
+<td><div onclick = "color('#cc66cc')" style ="width:10px;height:10px;background-color:#cc66cc"></div><td>
+<td><div onclick = "color('#ff66ff')" style ="width:10px;height:10px;background-color:#ff66ff"></div><td>
+<td><div onclick = "color('#ff99ff')" style ="width:10px;height:10px;background-color:#ff99ff"></div><td>
+
+</tr>
+</table></center>
+</tr>
+</table>
+
+
+<script>
+jsondata=[]
+var canvas = document.getElementById("canvas");
+var context=canvas.getContext('2d');
+function linew(){
+context.lineWidth = document.getElementById("linewid").value;
+}
+function fill(){
+f=1;
+} 
+function border(){
+f=0;
+}
+function save() {
+  if (filename.value==""){
+alert("Enter filename:");
+}
+else{
+$.post("/"+filename.value,{'name':filename.value,'data':JSON.stringify(jsondata)},function(data,status){alert("saved");});
+}
+}
+function resete(){
+canvas.width=canvas.width;
+}
+function pencil(){
+canvas.onmousedown=pencildown;
+canvas.onmouseup=pencilup;
+canvas.onmousemove=pencilmove;
+function pencildown(e){
+x=e.x;
+y=e.y;
+draw=true;
+}
+function pencilup(){
+draw=false;
+}
+function pencilmove(event){
+if (draw){
+   a =event.x;
+   b =event.y;
+   context.beginPath();
+   context.moveTo(x,y);
+   context.lineTo(a,b);
+   context.stroke();
+   context.closePath();
+   jsondata.push({"Type":"pencil", "X0":x,"Y0":y,"X1":a,"Y1":b,"width":context.lineWidth,"color":context.strokeStyle})
+   x=a;
+   y=b;
+ }}}
+function line(){
+canvas.onmousedown=linedown;
+canvas.onmouseup=lineup;
+canvas.onmousemove=linemove;
+function linedown(e){
+ img=context.getImageData(0,0,canvas.width,canvas.height);
+ startx=e.x;
+ starty=e.y;
+ drag1=true;
+}
+function lineup(e){
+ drag1=false;
+ jsondata.push({"Type":"line", "X0":startx,"Y0":starty,"X1":endx,"Y1":endy,"width":context.lineWidth,"color":context.strokeStyle})
+}
+function linemove(e){
+ if (drag1){
+ context.putImageData(img,0,0);
+ endx=e.x;
+ endy=e.y;
+ context.beginPath();
+ context.moveTo(startx,starty);
+ context.lineTo(endx,endy);
+ context.stroke();
+ context.closePath();
+}}}
+function rectangle(){
+canvas.onmousedown=rectdown;
+canvas.onmouseup=rectup;
+canvas.onmousemove=rectmove;
+function rectdown(e){
+ img=context.getImageData(0,0,canvas.width,canvas.height);
+ startx=e.x;
+ starty=e.y;
+ drag2=true;
+}
+function rectup(e){
+drag2=false;
+jsondata.push({"Type":"rect", "X0":startx,"Y0":starty,"W":rectw,"H":recth,"width":context.lineWidth,"color":context.strokeStyle,"fill":f})
+
+}
+function rectmove(e){
+if (drag2){
+context.putImageData(img,0,0);
+rectw=e.x-startx;
+recth=e.y-starty;
+context.strokeRect(startx,starty,rectw,recth);
+if (f==1){
+context.fillRect(startx,starty,rectw,recth);
+}
+}}}
+function circle(){
+canvas.onmousedown=circledown;
+canvas.onmouseup=circleup;
+canvas.onmousemove=circlemove;
+function circledown(e){
+ img=context.getImageData(0,0,canvas.width,canvas.height);
+ startx=e.x;
+ starty=e.y;
+ drag3=true;
+}
+function circleup(e){
+drag3=false;
+jsondata.push({"Type":"circle", "X0":startx,"Y0":starty,"X1":endx,"Y1":endy,"width":context.lineWidth,"color":context.strokeStyle,"fill":f})
+}
+function circlemove(e){
+if (drag3){
+context.putImageData(img,0,0);
+endx=e.x;
+endy=e.y;
+context.beginPath();
+context.arc(Math.abs(endx+startx)/2,Math.abs(endy+starty)/2,Math.sqrt(Math.pow(endx-startx,2)+Math.pow(endy-starty,2))/2, 0, Math.PI*2, true); 
+context.closePath();
+context.stroke();
+if (f==1){
+context.fill();
+}
+}}}
+function color(colour){
+context.strokeStyle=colour;
+context.fillStyle=colour;
+}
+function erase(){
+canvas.onmousedown=erasedown;
+canvas.onmouseup=eraseup;
+canvas.onmousemove=erasemove;
+function erasedown(e){
+  drag5=true;
+}
+function eraseup(e){
+drag5=false;
+}
+function erasemove(e){
+if(drag5){
+x=e.x;
+y=e.y;
+context.clearRect(x,y,20,20);
+}}}
+</script>
+</html>
